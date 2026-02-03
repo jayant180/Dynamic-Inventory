@@ -1,0 +1,22 @@
+name: CI for dynamic inventory
+on:
+  push:
+    branches: ["master"]
+  pull_request: 
+    branches: ["master"]
+  workflow_dispatch:
+jobs:
+  Ansible:
+    runs-on: ubuntu-latest
+steps:
+  - uses: actions/checkout@v4
+  
+  - name: Test python script without autocreating groups
+    run: ansible-inventory -i inventory.py --list
+  
+  - name: Test Dynamic group creation for all environments
+    run: ansible-inventory -i Inventory.py --graph
+  
+  - name: Test playbook
+    run: ansible-playbook i inventory.py test.yml
+    
